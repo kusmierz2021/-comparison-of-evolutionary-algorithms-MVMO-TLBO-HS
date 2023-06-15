@@ -31,29 +31,24 @@ def fitness_sphere(position):
 
 # Student class
 class Student:
-    def __init__(self, fitness, dim, minx, maxx, seed):
-        self.rnd = random.Random(seed)
+    def __init__(self, fitness, position):
 
-        # a list of size dim
-        # with 0.0 as value of all the elements
-        self.position = [0.0 for i in range(dim)]
-
-        # loop dim times and randomly select value of decision var
-        # value should be in between minx and maxx
-        for i in range(dim):
-            self.position[i] = ((maxx - minx) *
-                                self.rnd.random() + minx)
+        self.position = position
 
         # compute the fitness of student
         self.fitness = fitness(self.position)
 
 
 # Teaching learning based optimization
-def tlbo(fitness, max_iter, n, dim, minx, maxx):
+def tlbo(fitness, max_iter, population, boundaries):
+    minx, maxx = boundaries
+    n = len(population)
+    dim = len(population[0])
+
     rnd = random.Random(0)
 
     # create n random students
-    classroom = [Student(fitness, dim, minx, maxx, i) for i in range(n)]
+    classroom = [Student(fitness, ind.tolist()) for ind in population]
 
     # compute the value of best_position and best_fitness in the classroom
     Xbest = [0.0 for i in range(dim)]
