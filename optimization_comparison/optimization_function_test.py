@@ -1,7 +1,7 @@
-import optimization_functions
+from optimization_comparison import optimization_functions
+from optimization_comparison.optimization_functions import visualize
 import numpy as np
-from optimization_functions import visualize
-from CEC2022 import CEC2022
+from optimization_comparison.CEC2022 import CEC2022
 
 
 def test_rastrigins_function():
