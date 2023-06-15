@@ -1,6 +1,6 @@
 from evolutionary_algorithm import EvolutionaryAlgorithm
 import numpy as np
-from optimization_comparison.optimization_functions import rastrigins_function
+from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
 import random
 # import logging

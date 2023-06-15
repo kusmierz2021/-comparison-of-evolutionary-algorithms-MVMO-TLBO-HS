@@ -1,5 +1,5 @@
 from tlbo import TLBO
-from optimization_comparison.optimization_functions import rastrigins_function
+from optimization_functions.optimization_functions import rastrigins_function
 
 
 def test_mutation():

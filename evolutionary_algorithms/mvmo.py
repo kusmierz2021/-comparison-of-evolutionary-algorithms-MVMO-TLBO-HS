@@ -2,7 +2,7 @@ import numpy as np
 import math
 from numpy.random import uniform
 import copy
-from optimization_comparison.optimization_functions import rastrigins_function
+from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
 from evolutionary_algorithm import EvolutionaryAlgorithm
 

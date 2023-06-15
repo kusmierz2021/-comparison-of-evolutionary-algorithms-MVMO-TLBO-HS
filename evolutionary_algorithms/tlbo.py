@@ -2,7 +2,7 @@ from evolutionary_algorithm import EvolutionaryAlgorithm
 import numpy as np
 from random import random, choice, seed, randint
 from tqdm import tqdm
-from optimization_comparison.optimization_functions import rastrigins_function
+from optimization_functions.optimization_functions import rastrigins_function
 
 
 class TLBO(EvolutionaryAlgorithm):
