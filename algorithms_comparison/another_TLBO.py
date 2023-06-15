@@ -71,7 +71,7 @@ def tlbo(fitness, max_iter, n, dim, minx, maxx):
         # after every 10 iterations
         # print iteration number and best fitness value so far
         if Iter % 10 == 0 and Iter > 1:
-            print("Iter = " + str(Iter) + " best fitness = %.3f" % Fbest)
+            print(f"Iter = {str(Iter)} best fitness = {Fbest}")
 
         # for each student of classroom
         for i in range(n):
@@ -174,61 +174,61 @@ def tlbo(fitness, max_iter, n, dim, minx, maxx):
 
 # ----------------------------
 # Driver code for rastrigin function
+if __name__ == '__main__':
+    print("\nBegin  teaching learning based optimization on rastrigin function\n")
+    dim = 3
+    fitness = fitness_rastrigin
 
-print("\nBegin  teaching learning based optimization on rastrigin function\n")
-dim = 3
-fitness = fitness_rastrigin
+    print("Goal is to minimize Rastrigin's function in " + str(dim) + " variables")
+    print("Function has known min = 0.0 at (", end="")
+    for i in range(dim - 1):
+        print("0, ", end="")
+    print("0)")
 
-print("Goal is to minimize Rastrigin's function in " + str(dim) + " variables")
-print("Function has known min = 0.0 at (", end="")
-for i in range(dim - 1):
-    print("0, ", end="")
-print("0)")
+    num_particles = 50
+    max_iter = 100
 
-num_particles = 50
-max_iter = 100
+    print("Setting num_particles = " + str(num_particles))
+    print("Setting max_iter    = " + str(max_iter))
+    print("\nStarting TLBO algorithm\n")
 
-print("Setting num_particles = " + str(num_particles))
-print("Setting max_iter    = " + str(max_iter))
-print("\nStarting TLBO algorithm\n")
+    best_position = tlbo(fitness, max_iter, num_particles, dim, -10.0, 10.0)
 
-best_position = tlbo(fitness, max_iter, num_particles, dim, -10.0, 10.0)
+    print("\nTLBO completed\n")
+    print("\nBest Student found:")
+    print(["%.6f" % best_position[k] for k in range(dim)])
+    fitness_value = fitness(best_position)
+    print("fitness of best Student = %.6f" % fitness_value)
 
-print("\nTLBO completed\n")
-print("\nBest Student found:")
-print(["%.6f" % best_position[k] for k in range(dim)])
-fitness_value = fitness(best_position)
-print("fitness of best Student = %.6f" % fitness_value)
+    print("\nEnd TLBO for rastrigin function\n")
 
-print("\nEnd TLBO for rastrigin function\n")
+    print()
+    print()
 
-print()
-print()
+    # Driver code for Sphere function
+    print("\nBegin teaching learning based optimization on sphere function\n")
+    dim = 3
+    fitness = fitness_sphere
 
-# Driver code for Sphere function
-print("\nBegin teaching learning based optimization on sphere function\n")
-dim = 3
-fitness = fitness_sphere
+    print("Goal is to minimize sphere function in " + str(dim) + " variables")
+    print("Function has known min = 0.0 at (", end="")
+    for i in range(dim - 1):
+        print("0, ", end="")
+    print("0)")
 
-print("Goal is to minimize sphere function in " + str(dim) + " variables")
-print("Function has known min = 0.0 at (", end="")
-for i in range(dim - 1):
-    print("0, ", end="")
-print("0)")
+    num_particles = 50
+    max_iter = 100
 
-num_particles = 50
-max_iter = 100
+    print("Setting num_particles = " + str(num_particles))
+    print("Setting max_iter    = " + str(max_iter))
+    print("\nStarting TLBO algorithm\n")
 
-print("Setting num_particles = " + str(num_particles))
-print("Setting max_iter    = " + str(max_iter))
-print("\nStarting TLBO algorithm\n")
+    best_position = tlbo(fitness, max_iter, num_particles, dim, -10.0, 10.0)
 
-best_position = tlbo(fitness, max_iter, num_particles, dim, -10.0, 10.0)
+    print("\nTLBO completed\n")
+    print("\nBest Student found:")
+    print(["%.6f" % best_position[k] for k in range(dim)])
+    fitness_value = fitness(best_position)
+    print("fitness of best Student = %.6f" % fitness_value)
 
-print("\nTLBO completed\n")
-print("\nBest Student found:")
-print(["%.6f" % best_position[k] for k in range(dim)])
-fitness_value = fitness(best_position)
-print("fitness of best Student = %.6f" % fitness_value)
-
-print("\nEnd TLBO for sphere function\n")
+    print("\nEnd TLBO for sphere function\n")
