@@ -1,4 +1,4 @@
-from tlbo import TLBO
+from evolutionary_algorithms.tlbo import TLBO
 from optimization_functions.optimization_functions import rastrigins_function
 
 

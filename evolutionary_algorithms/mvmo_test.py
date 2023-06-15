@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from mvmo import MVMO
+from evolutionary_algorithms.mvmo import MVMO
 from optimization_functions.optimization_functions import rastrigins_function
 
 

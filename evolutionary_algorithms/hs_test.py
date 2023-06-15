@@ -1,4 +1,4 @@
-from hs import HS
+from evolutionary_algorithms.hs import HS
 from optimization_functions.optimization_functions import rastrigins_function
 
 

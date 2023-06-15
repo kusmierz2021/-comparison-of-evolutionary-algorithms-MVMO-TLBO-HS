@@ -1,4 +1,4 @@
-from evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_algorithms.evolutionary_algorithm import EvolutionaryAlgorithm
 import numpy as np
 from random import random, choice, seed, randint
 from tqdm import tqdm

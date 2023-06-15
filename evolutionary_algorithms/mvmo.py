@@ -4,7 +4,7 @@ from numpy.random import uniform
 import copy
 from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
-from evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_algorithms.evolutionary_algorithm import EvolutionaryAlgorithm
 
 
 class MVMO(EvolutionaryAlgorithm):
