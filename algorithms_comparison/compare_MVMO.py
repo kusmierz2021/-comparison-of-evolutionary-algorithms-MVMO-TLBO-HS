@@ -40,14 +40,12 @@ bds = [(rosenbrock_boundaries[0], rosenbrock_boundaries[1]) for _ in range(dimen
 # with open('./mvmo_populations/init_pop_10_nr_1', 'rb') as handle:
 #         population = pickle.load(handle)
 
-# for pop_size in [10, 100, 1000]:
-for pop_size in [10]:
+for pop_size in [10, 100, 1000]:
     my_results = []
     my_times = []
     other_results = []
     other_times = []
-    # for i in range(pop_size_num[pop_size]):
-    for i in range(4):
+    for i in range(pop_size_num[pop_size]):
         with open(f'./mvmo_populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
             population = pickle.load(handle)
         normalized_population = [(ind - rosenbrock_boundaries[0]) / (rosenbrock_boundaries[1] - rosenbrock_boundaries[0]) for ind in population]
