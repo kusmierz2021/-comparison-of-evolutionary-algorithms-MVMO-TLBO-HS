@@ -16,14 +16,20 @@ np.random.seed(42)
 random.seed(42)
 rastrigins_boundaries = (-5.12, 5.12)
 
+pop_size_num = {
+    10: 10_000,
+    100: 1000,
+    1000: 100
+}
 
 # prepare populations
 # tlbo_optimizer = TLBO(100_000, 6, rastrigins_boundaries, False)
 # for pop_size in [10, 100, 1000]:
-#     for i in range(100):
+#     for i in range(pop_size_num[pop_size]):
 #         tlbo_population = tlbo_optimizer.init_population(pop_size)
 #         with open(f'./tlbo_populations/init_pop_{pop_size}_nr_{i+1}', 'wb') as handle:
 #             pickle.dump(tlbo_population, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 
 # read population
 # with open('./tlbo_populations/init_pop_100_nr_1', 'rb') as handle:
@@ -35,7 +41,7 @@ for pop_size in [10, 100, 1000]:
     my_times = []
     other_results = []
     other_times = []
-    for i in range(100):
+    for i in range(pop_size_num[pop_size]):
         with open(f'./tlbo_populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
             population = pickle.load(handle)
 
