@@ -5,6 +5,7 @@ from optimization_functions.optimization_functions import rastrigins_function
 import pickle
 import random
 import logging
+import time
 assert round(rastrigins_function(np.array([4.52299, 4.52299, 4.52299, 4.52299,
                                                                       4.52299, 4.52299, 4.52299])), 5) == 282.47303
 assert round(fitness_rastrigin(np.array([4.52299, 4.52299, 4.52299, 4.52299,
@@ -31,14 +32,25 @@ rastrigins_boundaries = (-5.12, 5.12)
 
 for pop_size in [10, 100, 1000]:
     my_results = []
+    my_times = []
     other_results = []
+    other_times = []
     for i in range(100):
         with open(f'./tlbo_populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
             population = pickle.load(handle)
 
-        tlbo_optimizer = TLBO(100, 6, rastrigins_boundaries, False)
-        my_results.append(rastrigins_function(tlbo_optimizer.optimize(population, rastrigins_function)))
+        start = time.time()
+        my_results.append(rastrigins_function(TLBO(100, 6, rastrigins_boundaries, False).optimize(population, rastrigins_function)))
+        end = time.time()
+        my_times.append(end - start)
+
+        start = time.time()
         other_results.append(fitness_rastrigin(tlbo(fitness_rastrigin, 100, population, rastrigins_boundaries)))
-    logging.warning(f'pop_size -> {pop_size}')
+        end = time.time()
+        other_times.append(end - start)
+
+    logging.warning(f'pop_size -> {pop_size}\n')
     logging.warning(f'my results\n\tmean -> {sum(my_results)/len(my_results)}\n\t{my_results}')
+    logging.warning(f'my times\n\tmean -> {sum(my_times)/len(my_times)}\n\t{my_times}\n')
     logging.warning(f'other results\n\tmean -> {sum(other_results)/len(other_results)}\n\t{other_results}')
+    logging.warning(f'other times\n\tmean -> {sum(other_times)/len(other_times)}\n\t{other_times}\n\n')
