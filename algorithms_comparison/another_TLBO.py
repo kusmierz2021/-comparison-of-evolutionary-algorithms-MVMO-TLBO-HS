@@ -17,6 +17,15 @@ def fitness_rastrigin(position):
         fitness_value += (xi * xi) - (10 * math.cos(2 * math.pi * xi)) + 10
     return fitness_value
 
+# rosenbrock function
+def fitness_rosenbrock(position):
+    fitness_value = 0.0
+    for i in range(len(position)-1):
+        x1 = position[i]
+        x2 = position[i+1]
+        fitness_value += 100 * (x1 ** 2 - x2) ** 2 + (x2 - 1) ** 2
+    return fitness_value
+
 
 # sphere function
 def fitness_sphere(position):
@@ -65,8 +74,8 @@ def tlbo(fitness, max_iter, population, boundaries):
 
         # after every 10 iterations
         # print iteration number and best fitness value so far
-        if Iter % 10 == 0 and Iter > 1:
-            print(f"Iter = {str(Iter)} best fitness = {Fbest}")
+        # if Iter % 10 == 0 and Iter > 1:
+            # print(f"Iter = {str(Iter)} best fitness = {Fbest}")
 
         # for each student of classroom
         for i in range(n):

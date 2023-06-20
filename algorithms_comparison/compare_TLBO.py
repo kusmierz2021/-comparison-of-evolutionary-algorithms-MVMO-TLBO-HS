@@ -1,20 +1,20 @@
 import numpy as np
-from another_TLBO import fitness_rastrigin, tlbo
+from another_TLBO import fitness_rosenbrock, tlbo
 from evolutionary_algorithms.tlbo import TLBO
-from optimization_functions.optimization_functions import rastrigins_function
+from optimization_functions.optimization_functions import rosenbrock_function
 import pickle
 import random
 import logging
 import time
-assert round(rastrigins_function(np.array([4.52299, 4.52299, 4.52299, 4.52299,
-                                                                      4.52299, 4.52299, 4.52299])), 5) == 282.47303
-assert round(fitness_rastrigin(np.array([4.52299, 4.52299, 4.52299, 4.52299,
-                                                                      4.52299, 4.52299, 4.52299])), 5) == 282.47303
+assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
+assert round(fitness_rosenbrock(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
 logging.basicConfig(filename='tlbo_compare.log', filemode='w', format='%(message)s')
 np.random.seed(42)
 random.seed(42)
-rastrigins_boundaries = (-5.12, 5.12)
+rosenbrock_boundaries = (-10, 10)
+iterations = 100
+dimensions = 6
 
 pop_size_num = {
     10: 10_000,
@@ -22,36 +22,22 @@ pop_size_num = {
     1000: 100
 }
 
-# prepare populations
-# tlbo_optimizer = TLBO(100_000, 6, rastrigins_boundaries, False)
-# for pop_size in [10, 100, 1000]:
-#     for i in range(pop_size_num[pop_size]):
-#         tlbo_population = tlbo_optimizer.init_population(pop_size)
-#         with open(f'./tlbo_populations/init_pop_{pop_size}_nr_{i+1}', 'wb') as handle:
-#             pickle.dump(tlbo_population, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-# read population
-# with open('./tlbo_populations/init_pop_100_nr_1', 'rb') as handle:
-#         population = pickle.load(handle)
-
-
 for pop_size in [10, 100, 1000]:
     my_results = []
     my_times = []
     other_results = []
     other_times = []
     for i in range(pop_size_num[pop_size]):
-        with open(f'./tlbo_populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
+        with open(f'./populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
             population = pickle.load(handle)
 
         start = time.time()
-        my_results.append(rastrigins_function(TLBO(100, 6, rastrigins_boundaries, False).optimize(population, rastrigins_function)))
+        my_results.append(rosenbrock_function(TLBO(iterations, dimensions, rosenbrock_boundaries, False).optimize(population, rosenbrock_function)))
         end = time.time()
         my_times.append(end - start)
 
         start = time.time()
-        other_results.append(fitness_rastrigin(tlbo(fitness_rastrigin, 100, population, rastrigins_boundaries)))
+        other_results.append(fitness_rosenbrock(tlbo(fitness_rosenbrock, iterations, population, rosenbrock_boundaries)))
         end = time.time()
         other_times.append(end - start)
 

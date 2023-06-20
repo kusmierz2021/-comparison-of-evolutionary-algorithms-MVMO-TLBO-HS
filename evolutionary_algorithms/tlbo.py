@@ -33,7 +33,7 @@ class TLBO(EvolutionaryAlgorithm):
         :rtype: numpy.ndarray
         """
         best_individual = self.evaluation(population, optimize_function)[1]
-        print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
+        # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
 
         for _ in tqdm(range(self.iterations)):
             evaluated_mutated_population = self.mutation(population, optimize_function)
@@ -43,7 +43,7 @@ class TLBO(EvolutionaryAlgorithm):
             if (optimize_function(potential_best_individual) > optimize_function(best_individual)) if self.maximize \
                     else (optimize_function(potential_best_individual) < optimize_function(best_individual)):
                 best_individual = potential_best_individual
-                print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
+                # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
         return best_individual
 
     # TODO: before changes, it seems to be some problem with mutagen
