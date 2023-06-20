@@ -32,7 +32,7 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
         self._par = 0.5  # pitch adjusting rate
         self._mpap = 0.25  # maximum pitch adjustment proportion (new parameter defined in pitch_adjustment()) - used for continuous variables only
         self._mpai = 2  # maximum pitch adjustment index (also defined in pitch_adjustment()) - used for discrete variables only
-        self._random_seed = 8675309  # optional random seed for reproducible results
+        # self._random_seed = 8675309  # optional random seed for reproducible results
 
     def get_fitness(self, vector):
         """
