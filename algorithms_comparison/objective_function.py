@@ -1,4 +1,4 @@
-from pyharmonysearch import ObjectiveFunctionInterface, harmony_search
+from pyharmonysearch import ObjectiveFunctionInterface
 from math import pow
 import random
 
@@ -36,10 +36,10 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
 
     def get_fitness(self, vector):
         """
-            maximize -(x^2 + (y+1)^2) + 4
-            The maximum is 4 at (0, -1).
+            minimize Rosenbrocks function.
+            The minimum is 0 at (1, 1, 1, 1, 1, 1).
         """
-        return (pow(vector[0], 2) + pow(vector[1] + 1, 2)) + 4
+        return sum([100 * pow((pow(x1, 2) - x2), 2) + pow(x2 - 1, 2) for x1, x2 in zip(vector[:-1], vector[1:])])
 
     def get_value(self, i, index=None):
         """
@@ -89,11 +89,3 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
 
     def maximize(self):
         return self._maximize
-
-if __name__ == '__main__':
-    obj_fun = ObjectiveFunction()
-    num_processes = 1
-    num_iterations = 1  # because random_seed is defined, there's no point in running this multiple times
-    initial_harmonies = [[random.randint(-1000, 1000) for _ in range(6)] for _ in range(100)]
-    results = harmony_search(obj_fun, num_processes, num_iterations, initial_harmonies=initial_harmonies)
-    print('Elapsed time: {}\nBest harmony: {}\nBest fitness: {}'.format(results.elapsed_time, results.best_harmony, results.best_fitness))
