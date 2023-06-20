@@ -13,7 +13,7 @@ logging.basicConfig(filename='tlbo_compare.log', filemode='w', format='%(message
 np.random.seed(42)
 random.seed(42)
 rosenbrock_boundaries = (-10, 10)
-iterations = 100
+iterations = 250
 dimensions = 6
 
 pop_size_num = {
