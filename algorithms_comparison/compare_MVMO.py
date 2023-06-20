@@ -27,26 +27,13 @@ mutation_size = 1
 iterations = 1000
 bds = [(rosenbrock_boundaries[0], rosenbrock_boundaries[1]) for _ in range(dimensions)]
 
-
-# prepare populations
-# mvmo_optimizer = MVMO(100_000, 6, rosenbrock_boundaries, False, mutation_size=mutation_size)
-# for pop_size in [10, 100, 1000]:
-#     for i in range(pop_size_num[pop_size]):
-#         mvmo_population = mvmo_optimizer.init_population(pop_size)
-#         with open(f'./mvmo_populations/init_pop_{pop_size}_nr_{i+1}', 'wb') as handle:
-#             pickle.dump(mvmo_population, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-# read population
-# with open('./mvmo_populations/init_pop_10_nr_1', 'rb') as handle:
-#         population = pickle.load(handle)
-
 for pop_size in [10, 100, 1000]:
     my_results = []
     my_times = []
     other_results = []
     other_times = []
     for i in range(pop_size_num[pop_size]):
-        with open(f'./mvmo_populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
+        with open(f'./populations/init_pop_{pop_size}_nr_{i+1}', 'rb') as handle:
             population = pickle.load(handle)
         normalized_population = [(ind - rosenbrock_boundaries[0]) / (rosenbrock_boundaries[1] - rosenbrock_boundaries[0]) for ind in population]
 
