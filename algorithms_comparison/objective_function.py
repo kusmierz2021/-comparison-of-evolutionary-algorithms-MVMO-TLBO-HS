@@ -19,15 +19,15 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
         Warning: Stochastically solving a linear system is dumb. This is just a toy example.
     """
 
-    def __init__(self):
-        self._lower_bounds = [-5.12, -5.12, -5.12, -5.12, -5.12, -5.12]
-        self._upper_bounds = [5.12, 5.12, 5.12, 5.12, 5.12, 5.12]
+    def __init__(self, iterations, population_size):
+        self._lower_bounds = [-10, -10, -10, -10, -10, -10]
+        self._upper_bounds = [10, 10, 10, 10, 10, 10]
         self._variable = [True, True, True, True, True, True]
 
         # define all input parameters
         self._maximize = False  # do we maximize or minimize?
-        self._max_imp = 50000  # maximum number of improvisations
-        self._hms = 100  # harmony memory size
+        self._max_imp = iterations  # maximum number of improvisations
+        self._hms = population_size  # harmony memory size
         self._hmcr = 0.75  # harmony memory considering rate
         self._par = 0.5  # pitch adjusting rate
         self._mpap = 0.25  # maximum pitch adjustment proportion (new parameter defined in pitch_adjustment()) - used for continuous variables only
