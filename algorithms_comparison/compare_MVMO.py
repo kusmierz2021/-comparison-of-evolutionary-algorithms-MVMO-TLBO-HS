@@ -43,7 +43,7 @@ for pop_size in [10, 100, 1000]:
         my_times.append(end - start)
 
         start = time.time()
-        other_results.append(rosenbrock_function(another_MVMO(iterations=iterations, num_mutation=mutation_size, population_size=len(normalized_population)).optimize(obj_fun=rosenbrock_function, bounds=bds)['x']))
+        other_results.append(rosenbrock_function(another_MVMO(logger=False, iterations=iterations, num_mutation=mutation_size, population_size=len(normalized_population)).optimize(obj_fun=rosenbrock_function, bounds=bds)['x']))
         end = time.time()
         other_times.append(end - start)
 

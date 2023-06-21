@@ -37,6 +37,9 @@ class MVMO(EvolutionaryAlgorithm):
         self.kd = 0.0505 / self.dimensions + 1.0
         self.n_best_size = 10
         self.start = time.time()
+        self.time_dict = {10: 0.3443125405073166,
+                          100: 1.0884363498687744,
+                          1000: 4.272682538032532}
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
         """
@@ -52,7 +55,7 @@ class MVMO(EvolutionaryAlgorithm):
         best_population = best_individual = None
 
         for _ in tqdm(range(self.iterations)):
-            if (time.time() - self.start) > 5:
+            if (time.time() - self.start) > self.time_dict[len(population)]:
                 return best_individual
             best_population, mean_individual, var_individual = self.evaluation(normalized_population,
                                                                                optimize_function, self.n_best_size,
