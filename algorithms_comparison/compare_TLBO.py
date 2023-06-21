@@ -46,3 +46,4 @@ for pop_size in [10, 100, 1000]:
     logging.warning(f'my times\n\tmean -> {sum(my_times)/len(my_times)}\n\t{my_times}\n')
     logging.warning(f'other results\n\tmean -> {sum(other_results)/len(other_results)}\n\t{other_results}')
     logging.warning(f'other times\n\tmean -> {sum(other_times)/len(other_times)}\n\t{other_times}\n\n')
+#v2
