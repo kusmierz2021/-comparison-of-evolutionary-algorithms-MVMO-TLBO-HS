@@ -9,20 +9,20 @@ import time
 assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 assert round(fitness_rosenbrock(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
-logging.basicConfig(filename='tlbo_compare.log', filemode='w', format='%(message)s')
+logging.basicConfig(filename='tlbo_compare_v3.log', filemode='w', format='%(message)s')
 np.random.seed(42)
 random.seed(42)
 rosenbrock_boundaries = (-10, 10)
-iterations = 250
+iterations = 10000
 dimensions = 6
 
 pop_size_num = {
-    10: 10_000,
-    100: 1000,
+    10: 1000,
+    100: 100,
     1000: 100
 }
 
-for pop_size in [10, 100, 1000]:
+for pop_size in [10, 100]:
     my_results = []
     my_times = []
     other_results = []
