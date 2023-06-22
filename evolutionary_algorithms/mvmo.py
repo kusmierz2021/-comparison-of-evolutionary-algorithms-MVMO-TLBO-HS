@@ -54,9 +54,10 @@ class MVMO(EvolutionaryAlgorithm):
         normalized_population = self.normalize_population(population)
         best_population = best_individual = None
 
-        for _ in tqdm(range(self.iterations)):
-            if (time.time() - self.start) > self.time_dict[len(population)]:
-                return best_individual
+        # for _ in tqdm(range(self.iterations)):
+        for _ in range(self.iterations):
+            # if (time.time() - self.start) > self.time_dict[len(population)]:
+            #     return best_individual
             best_population, mean_individual, var_individual = self.evaluation(normalized_population,
                                                                                optimize_function, self.n_best_size,
                                                                                best_population)
