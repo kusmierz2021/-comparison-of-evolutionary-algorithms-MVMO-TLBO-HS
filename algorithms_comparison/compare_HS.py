@@ -16,14 +16,14 @@ np.random.seed(42)
 random.seed(42)
 
 pop_size_num = {
-    10: 10_000,
+    10: 1000,
     100: 1000,
     1000: 100
 }
 
 rosenbrock_boundaries = (-10, 10)
 dimensions = 6
-iterations = 100
+iterations = 5000
 
 if __name__ == '__main__':
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     num_processes = 1
     workers = 1
 
-    for pop_size in [10, 100, 1000]:
+    for pop_size in [10]:
         my_results = []
         my_times = []
         other_results = []
