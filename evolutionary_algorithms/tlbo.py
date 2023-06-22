@@ -35,7 +35,8 @@ class TLBO(EvolutionaryAlgorithm):
         best_individual = self.evaluation(population, optimize_function)[1]
         # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
 
-        for _ in tqdm(range(self.iterations)):
+        # for _ in tqdm(range(self.iterations)):
+        for _ in range(self.iterations):
             evaluated_mutated_population = self.mutation(population, optimize_function)
             population = self.crossover(evaluated_mutated_population, optimize_function)
             potential_best_individual = self.evaluation(population, optimize_function)[1]
