@@ -59,7 +59,8 @@ class HS(EvolutionaryAlgorithm):
         #                 f"population_size: {len(population)}  hmcr: {self.hmcr}  par: {self.par}  "
         #                 f"optimize_function: {optimize_function.__name__} ")
         best_individual = None
-        for _ in tqdm(range(self.iterations)):
+        for _ in range(self.iterations):
+        # for _ in tqdm(range(self.iterations)):
 
             child = self.reproduction(population)
             evaluated_population = self.evaluation(population, optimize_function, child)
