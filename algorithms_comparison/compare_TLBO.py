@@ -1,11 +1,13 @@
 import numpy as np
-from another_TLBO import fitness_rosenbrock, tlbo
+from another_TLBO import fitness_rosenbrock, fitness_zakharov, tlbo
 from evolutionary_algorithms.tlbo import TLBO
-from optimization_functions.optimization_functions import rosenbrock_function
+from optimization_functions.optimization_functions import rosenbrock_function, zakharov_function
 import pickle
 import random
 import logging
 import time
+assert round(zakharov_function(np.array([0, 0, 0, 0, 0, 0])), 2) == 0
+assert round(fitness_zakharov(np.array([0, 0, 0, 0, 0, 0])), 2) == 0
 assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 assert round(fitness_rosenbrock(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
@@ -13,16 +15,16 @@ logging.basicConfig(filename='tlbo_compare_v3.log', filemode='w', format='%(mess
 np.random.seed(42)
 random.seed(42)
 rosenbrock_boundaries = (-10, 10)
-iterations = 10000
+iterations = 250
 dimensions = 6
 
 pop_size_num = {
-    10: 1000,
-    100: 100,
+    10: 10_000,
+    100: 1000,
     1000: 100
 }
 
-for pop_size in [10, 100]:
+for pop_size in [10, 100, 1000]:
     my_results = []
     my_times = []
     other_results = []
