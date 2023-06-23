@@ -26,6 +26,13 @@ def fitness_rosenbrock(position):
         fitness_value += 100 * (x1 ** 2 - x2) ** 2 + (x2 - 1) ** 2
     return fitness_value
 
+# zakharov function
+def fitness_zakharov(position):
+    fitness_value = 0.0
+    for i in range(len(position)):
+        x1 = position[i]
+        fitness_value += x1**2 + (0.5 * x1)**2 + (0.5 * x1)**4
+    return fitness_value
 
 # sphere function
 def fitness_sphere(position):
