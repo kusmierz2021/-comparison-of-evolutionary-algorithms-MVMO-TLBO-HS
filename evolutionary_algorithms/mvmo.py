@@ -5,7 +5,7 @@ import copy
 from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
 from evolutionary_algorithms.evolutionary_algorithm import EvolutionaryAlgorithm
-
+import time
 
 class MVMO(EvolutionaryAlgorithm):
     def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool,
@@ -36,6 +36,10 @@ class MVMO(EvolutionaryAlgorithm):
         self.val_shape_factor_sd = val_shape_factor_sd
         self.kd = 0.0505 / self.dimensions + 1.0
         self.n_best_size = 10
+        self.start = time.time()
+        self.time_dict = {10: 0.3443125405073166,
+                          100: 1.0884363498687744,
+                          1000: 4.272682538032532}
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
         """
@@ -50,18 +54,21 @@ class MVMO(EvolutionaryAlgorithm):
         normalized_population = self.normalize_population(population)
         best_population = best_individual = None
 
-        for _ in tqdm(range(self.iterations)):
+        # for _ in tqdm(range(self.iterations)):
+        for _ in range(self.iterations):
+            # if (time.time() - self.start) > self.time_dict[len(population)]:
+            #     return best_individual
             best_population, mean_individual, var_individual = self.evaluation(normalized_population,
                                                                                optimize_function, self.n_best_size,
                                                                                best_population)
 
             if best_individual is None:
                 best_individual = best_population[0]
-                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
             elif ((best_population[0][1] > best_individual[1])
                   if self.maximize else (best_population[0][1] < best_individual[1])):
                 best_individual = best_population[0]
-                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
 
             normalized_population = self.mutation(normalized_population, mean_individual,
                                                   var_individual, best_individual[0])
