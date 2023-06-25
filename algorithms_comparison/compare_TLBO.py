@@ -11,21 +11,20 @@ assert round(fitness_zakharov(np.array([0, 0, 0, 0, 0, 0])), 2) == 0
 assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 assert round(fitness_rosenbrock(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
-logging.basicConfig(filename='tlbo_compare_v2_z.log', filemode='w', format='%(message)s')
+logging.basicConfig(filename='tlbo_compare_v3_z.log', filemode='w', format='%(message)s')
 np.random.seed(42)
 random.seed(42)
 rosenbrock_boundaries = (-10, 10)
 zakharov_boundaries = (-10, 10)
-iterations = 250
+iterations = 10_000
 dimensions = 6
 
 pop_size_num = {
-    10: 10_000,
-    100: 1000,
-    1000: 100
+    10: 1000,
+    100: 100
 }
 
-for pop_size in [10, 100, 1000]:
+for pop_size in [10, 100]:
     my_results = []
     my_times = []
     other_results = []
