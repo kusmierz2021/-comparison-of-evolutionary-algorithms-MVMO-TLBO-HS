@@ -10,7 +10,7 @@ import pickle
 assert round(zakharov_function(np.array([0, 0, 0, 0, 0, 0])), 2) == 0
 assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
-logging.basicConfig(filename='mvmo_compare.log', filemode='w', format='%(message)s')
+logging.basicConfig(filename='mvmo_compare_v2_z.log', filemode='w', format='%(message)s')
 np.random.seed(42)
 random.seed(42)
 

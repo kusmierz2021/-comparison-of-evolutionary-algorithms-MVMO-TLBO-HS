@@ -37,9 +37,9 @@ class MVMO(EvolutionaryAlgorithm):
         self.kd = 0.0505 / self.dimensions + 1.0
         self.n_best_size = 10
         self.start = time.time()
-        self.time_dict = {10: 0.3443125405073166,
-                          100: 1.0884363498687744,
-                          1000: 4.272682538032532}
+        self.time_dict = {10: 0.3239209717512,
+                          100: 0.8963087019920,
+                          1000: 1.3441928219795}
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
         """
