@@ -11,10 +11,11 @@ assert round(fitness_zakharov(np.array([0, 0, 0, 0, 0, 0])), 2) == 0
 assert round(rosenbrock_function(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 assert round(fitness_rosenbrock(np.array([1, 1, 1, 1, 1, 1])), 2) == 0
 
-logging.basicConfig(filename='tlbo_compare_v3.log', filemode='w', format='%(message)s')
+logging.basicConfig(filename='tlbo_compare_v2_z.log', filemode='w', format='%(message)s')
 np.random.seed(42)
 random.seed(42)
 rosenbrock_boundaries = (-10, 10)
+zakharov_boundaries = (-10, 10)
 iterations = 250
 dimensions = 6
 
@@ -34,12 +35,12 @@ for pop_size in [10, 100, 1000]:
             population = pickle.load(handle)
 
         start = time.time()
-        my_results.append(rosenbrock_function(TLBO(iterations, dimensions, rosenbrock_boundaries, False).optimize(population, rosenbrock_function)))
+        my_results.append(zakharov_function(TLBO(iterations, dimensions, zakharov_boundaries, False).optimize(population, zakharov_function)))
         end = time.time()
         my_times.append(end - start)
 
         start = time.time()
-        other_results.append(fitness_rosenbrock(tlbo(fitness_rosenbrock, iterations, population, rosenbrock_boundaries)))
+        other_results.append(fitness_zakharov(tlbo(fitness_zakharov, iterations, population, zakharov_boundaries)))
         end = time.time()
         other_times.append(end - start)
 
