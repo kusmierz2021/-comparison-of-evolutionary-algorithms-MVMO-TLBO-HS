@@ -39,7 +39,12 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
             minimize Rosenbrocks function.
             The minimum is 0 at (1, 1, 1, 1, 1, 1).
         """
-        return sum([100 * pow((pow(x1, 2) - x2), 2) + pow(x2 - 1, 2) for x1, x2 in zip(vector[:-1], vector[1:])])
+        # return sum([100 * pow((pow(x1, 2) - x2), 2) + pow(x2 - 1, 2) for x1, x2 in zip(vector[:-1], vector[1:])])
+        """
+            minimize Zakharovs function.
+            The minimum is 0 at (0, 0, 0, 0, 0, 0).
+        """
+        return sum([pow(x, 2) for x in vector]) + pow(sum([0.5 * x for x in vector]), 2) + pow(sum([0.5 * x for x in vector]), 4)
 
     def get_value(self, i, index=None):
         """
