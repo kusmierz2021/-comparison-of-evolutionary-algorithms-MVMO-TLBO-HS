@@ -690,7 +690,7 @@ class cec2022_func():
         
 
     def values(self, x):
-        x = np.array(x)
+        x = np.transpose(np.array(x))
         nx, mx = np.shape(x)
         ObjFunc = np.zeros((mx,))
         for i in range(mx):
