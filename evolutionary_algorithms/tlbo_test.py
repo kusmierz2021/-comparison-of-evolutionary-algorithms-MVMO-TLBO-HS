@@ -7,10 +7,11 @@ def test_mutation():
     boundaries = (-5.12, 5.12)
     optimizer = TLBO(1, dimensions, boundaries, maximize=True)
     population = optimizer.init_population(5)
-    mutated_population = optimizer.mutation(population, rastrigins_function)
+    evaluated_population, best_individual, mean_individual = optimizer.evaluation(population, rastrigins_function)
+    mutated_population = optimizer.mutation(population, best_individual[0], mean_individual)
 
     assert len(mutated_population) == len(population)
-    assert len(mutated_population[0][0]) == len(population[0]) == dimensions
+    assert len(mutated_population[0]) == len(population[0]) == dimensions
 
 
 def test_evaluation():
@@ -23,7 +24,7 @@ def test_evaluation():
 
     assert len(best_individual) == dimensions
     assert len(mean_individual) == dimensions
-    assert all(sphere_function(best_individual) <= ind[1] for ind in evaluated_population)
+    assert all(sphere_function(best_individual[0]) <= ind[1] for ind in evaluated_population)
 
     optimizer = TLBO(1, dimensions, boundaries, maximize=True)
     population = optimizer.init_population(5)
@@ -31,7 +32,7 @@ def test_evaluation():
 
     assert len(best_individual) == dimensions
     assert len(mean_individual) == dimensions
-    assert all(rastrigins_function(best_individual) >= ind[1] for ind in evaluated_population)
+    assert all(rastrigins_function(best_individual[0]) >= ind[1] for ind in evaluated_population)
 
 
 def test_crossover():
@@ -40,6 +41,6 @@ def test_crossover():
     optimizer = TLBO(1, dimensions, boundaries, maximize=True)
     population = optimizer.init_population(5)
     evaluated_population, best_individual, mean_individual = optimizer.evaluation(population, rastrigins_function)
-    crossed_population = optimizer.crossover(evaluated_population, rastrigins_function)
+    crossed_population = optimizer.crossover(evaluated_population)
     assert len(crossed_population) == len(population)
     assert len(crossed_population[0]) == len(population[0]) == dimensions

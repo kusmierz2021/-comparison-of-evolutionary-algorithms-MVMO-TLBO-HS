@@ -30,20 +30,46 @@ class TLBO(EvolutionaryAlgorithm):
         :return: best from found solutions
         :rtype: numpy.ndarray
         """
-        best_individual = self.evaluation(population, optimize_function)[1]
+        # best_individual = self.evaluation(population, optimize_function)[1]
         # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
 
-        # for _ in tqdm(range(self.iterations)):
-        for _ in range(self.iterations):
-            evaluated_mutated_population = self.mutation(population, optimize_function)
-            population = self.crossover(evaluated_mutated_population, optimize_function)
-            potential_best_individual = self.evaluation(population, optimize_function)[1]
+        evaluated_population, best_individual, mean_individual = self.evaluation(population, optimize_function)
+        for _ in tqdm(range(self.iterations)):
 
-            if (optimize_function(potential_best_individual) > optimize_function(best_individual)) if self.maximize \
-                    else (optimize_function(potential_best_individual) < optimize_function(best_individual)):
-                best_individual = potential_best_individual
-                # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
-        return best_individual
+        # for _ in range(self.iterations):
+
+
+            mutated_population = self.mutation([ind[0] for ind in evaluated_population], best_individual[0], mean_individual)
+            evaluated_mutated_population = self.evaluation(mutated_population, optimize_function)[0]
+            if self.maximize:
+                evaluated_mutated_population = [mutated_ind if mutated_ind[1] > ind[1] else ind for mutated_ind, ind in zip(evaluated_mutated_population, evaluated_population)]
+            else:
+                evaluated_mutated_population = [mutated_ind if mutated_ind[1] < ind[1] else ind for mutated_ind, ind in
+                                      zip(evaluated_mutated_population, evaluated_population)]
+            crossed_population = self.crossover(evaluated_mutated_population)
+            evaluated_crossed_population = self.evaluation(crossed_population, optimize_function)[0]
+            if self.maximize:
+                evaluated_crossed_population = [crossed_ind if crossed_ind[1] > mutated_ind[1] else mutated_ind for
+                                                mutated_ind, crossed_ind in
+                                                zip(evaluated_mutated_population, evaluated_crossed_population)]
+            else:
+                evaluated_crossed_population = [crossed_ind if crossed_ind[1] < mutated_ind[1] else mutated_ind for
+                                                mutated_ind, crossed_ind in
+                                                zip(evaluated_mutated_population, evaluated_crossed_population)]
+
+
+
+            # potential_best_individual = sorted(evaluated_crossed_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
+            # if (potential_best_individual[1] > best_individual[1]) if self.maximize \
+            #         else (potential_best_individual[1] < best_individual[1]):
+            #     best_individual = potential_best_individual
+            #     print(f"new best: {best_individual[0]} -> {best_individual[1]}")
+
+            best_individual = sorted(evaluated_crossed_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
+            # print(f"best: {best_individual[0]} -> {best_individual[1]}")
+            evaluated_population = evaluated_crossed_population
+            mean_individual = np.mean([ind[0] for ind in evaluated_population], axis=0)
+        return best_individual[0]
 
     # TODO: before changes, it seems to be some problem with mutagen
     # def mutation(self, population: list[np.ndarray], fitness_function: callable):
@@ -72,7 +98,7 @@ class TLBO(EvolutionaryAlgorithm):
     #                 in zip(evaluated_mutated_population, evaluated_population)]
 
     # TODO: now it will work better, take care of optimization results
-    def mutation(self, population: list[np.ndarray], fitness_function: callable):
+    def mutation(self, population: list[np.ndarray], best_individual: np.ndarray, mean_individual: np.ndarray):
         """
         Mutates every individual in the population
         :param population: population to be mutated
@@ -82,7 +108,7 @@ class TLBO(EvolutionaryAlgorithm):
         :return: evaluated mutated population
         :rtype: list[tuple[numpy.ndarray, float]]
         """
-        evaluated_population, best_individual, mean_individual = self.evaluation(population, fitness_function)
+
         # mutation_rate = round((random()+1))
         # r = random()
         mutagen_pop = [np.array([random() for _ in range(len(mean_individual))]) *
@@ -91,14 +117,7 @@ class TLBO(EvolutionaryAlgorithm):
 
         mutated_population = [ind + mutagen for (ind, mutagen) in zip(population, mutagen_pop)]
         mutated_population = self.ensure_boundaries_population(mutated_population)
-        evaluated_mutated_population = self.evaluation(mutated_population, fitness_function)[0]
-
-        if self.maximize:
-            return [mutated_ind if mutated_ind[1] > ind[1] else ind for mutated_ind, ind
-                    in zip(evaluated_mutated_population, evaluated_population)]
-        else:
-            return [mutated_ind if mutated_ind[1] < ind[1] else ind for mutated_ind, ind
-                    in zip(evaluated_mutated_population, evaluated_population)]
+        return mutated_population
 
     def evaluation(self, population: list[np.ndarray], fitness_function: callable):
         """
@@ -111,7 +130,7 @@ class TLBO(EvolutionaryAlgorithm):
         :rtype: tuple[list[tuple[numpy.ndarray, float]], numpy.ndarray, numpy.ndarray]
         """
         evaluated_population = [(ind, fitness_function(ind)) for ind in population]
-        best_individual = sorted(evaluated_population, key=lambda ind: ind[1], reverse=self.maximize)[0][0]
+        best_individual = sorted(evaluated_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
         mean_individual = np.mean(population, axis=0)
 
         return evaluated_population, best_individual, mean_individual
@@ -137,8 +156,7 @@ class TLBO(EvolutionaryAlgorithm):
         """
         return [self.ensure_boundaries_individual(new_ind) for new_ind in new_pop]
 
-    def crossover(self, evaluated_population: list[tuple[np.ndarray, float]], fitness_function: callable)\
-            -> list[np.ndarray]:
+    def crossover(self, evaluated_population: list[tuple[np.ndarray, float]]) -> list[np.ndarray]:
         """
         For every individual draws other individual with other fitness function value and crosses them
         :param evaluated_population: evaluated population
@@ -175,8 +193,6 @@ class TLBO(EvolutionaryAlgorithm):
                     new_ind = np.array([g1 + r * (g2 - g1) for g1, g2 in zip(ind[0], ind_to_cross[0])])
 
             new_ind = self.ensure_boundaries_individual(new_ind)
-            new_ind = new_ind if ((fitness_function(new_ind) > ind[1] and self.maximize)
-                                  or (fitness_function(new_ind) < ind[1] and not self.maximize)) else ind[0]
 
             crossed_population.append(new_ind)
         return crossed_population
