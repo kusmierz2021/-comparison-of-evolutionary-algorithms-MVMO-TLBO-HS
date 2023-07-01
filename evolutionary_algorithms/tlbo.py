@@ -20,6 +20,9 @@ class TLBO(EvolutionaryAlgorithm):
         :param maximize: True for maximization, False for minimization
         :type maximize: bool
         """
+
+        logging.basicConfig(filename='tlbo.log', filemode='a', format='%(message)s')
+
         super().__init__(iterations, dimensions, boundaries, maximize, cec_optimum, cec_error_value)
 
 
@@ -37,7 +40,10 @@ class TLBO(EvolutionaryAlgorithm):
         # print(f"new best: {best_individual} -> {optimize_function(best_individual)}")
 
         evaluated_population, best_individual, mean_individual = self.evaluation(population, optimize_function)
-        for _ in tqdm(range(self.iterations)):
+        if self.cec_optimum is not None:
+            self.iterations = int(self.iterations / 2)
+
+        for i in tqdm(range(self.iterations)):
 
         # for _ in range(self.iterations):
 
@@ -72,6 +78,15 @@ class TLBO(EvolutionaryAlgorithm):
             # print(f"best: {best_individual[0]} -> {best_individual[1]}")
             evaluated_population = evaluated_crossed_population
             mean_individual = np.mean([ind[0] for ind in evaluated_population], axis=0)
+
+            if self.cec_optimum is not None:
+                diff = best_individual[1] - self.cec_optimum
+                if diff < self.cec_error_value:
+                    logging.warning(f'{(i+1) * 2}')
+                    return best_individual
+                if (i+1) * 2 >= self.k_FES[self.k]:
+                    logging.warning(f'{diff}')
+                    self.k = self.k + 1
         return best_individual[0]
 
     # TODO: before changes, it seems to be some problem with mutagen
@@ -132,7 +147,10 @@ class TLBO(EvolutionaryAlgorithm):
         :return: evaluated population, best individual, mean individual
         :rtype: tuple[list[tuple[numpy.ndarray, float]], numpy.ndarray, numpy.ndarray]
         """
-        evaluated_population = [(ind, fitness_function(ind)) for ind in population]
+
+        # CEC version
+        evaluated_population = list(zip(population, fitness_function(population)))
+        # evaluated_population = [(ind, fitness_function(ind)) for ind in population]
         best_individual = sorted(evaluated_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
         mean_individual = np.mean(population, axis=0)
 
