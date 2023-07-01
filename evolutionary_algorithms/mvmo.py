@@ -6,10 +6,12 @@ from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
 from evolutionary_algorithms.evolutionary_algorithm import EvolutionaryAlgorithm
 import time
+import logging
 
 class MVMO(EvolutionaryAlgorithm):
     def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool,
-                 mutation_size: int, shaping_scaling_factor_fs=1.0, asymmetry_factor_af=1.0, val_shape_factor_sd=75.0):
+                 mutation_size: int, shaping_scaling_factor_fs=1.0, asymmetry_factor_af=1.0, val_shape_factor_sd=75.0,
+                 cec_optimum=None, cec_error_value=None):
         """
         A Mean-Variance Optimization Algorithm
         :param iterations: number of iterations during optimization
@@ -29,6 +31,8 @@ class MVMO(EvolutionaryAlgorithm):
         :param val_shape_factor_sd: between 10.0 and 90.0, by default 75.0
         :type val_shape_factor_sd: float
         """
+        logging.basicConfig(filename='mvmo.log', filemode='a', format='%(message)s')
+
         super().__init__(iterations, dimensions, boundaries, maximize)
         self.mutation_size = mutation_size
         self.shaping_scaling_factor_fs = shaping_scaling_factor_fs
@@ -36,10 +40,15 @@ class MVMO(EvolutionaryAlgorithm):
         self.val_shape_factor_sd = val_shape_factor_sd
         self.kd = 0.0505 / self.dimensions + 1.0
         self.n_best_size = 10
-        self.start = time.time()
-        self.time_dict = {10: 0.3239209717512,
-                          100: 0.8963087019920,
-                          1000: 1.3441928219795}
+        self.cec_optimum = cec_optimum
+        self.cec_error_value = cec_error_value
+        if cec_optimum is not None:
+            self.k_FES = {k: dimensions ** (k / 5 - 3) * iterations for k in range(16)}
+            self.k = 0
+        # self.start = time.time()
+        # self.time_dict = {10: 0.3239209717512,
+        #                   100: 0.8963087019920,
+        #                   1000: 1.3441928219795}
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
         """
@@ -54,24 +63,32 @@ class MVMO(EvolutionaryAlgorithm):
         normalized_population = self.normalize_population(population)
         best_population = best_individual = None
 
-        # for _ in tqdm(range(self.iterations)):
-        for _ in range(self.iterations):
-            if (time.time() - self.start) > self.time_dict[len(population)]:
-                return best_individual
+        for i in tqdm(range(self.iterations)):
+        # for i in range(self.iterations):
+            # if (time.time() - self.start) > self.time_dict[len(population)]:
+            #     return best_individual
             best_population, mean_individual, var_individual = self.evaluation(normalized_population,
                                                                                optimize_function, self.n_best_size,
                                                                                best_population)
 
             if best_individual is None:
                 best_individual = best_population[0]
-                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
             elif ((best_population[0][1] > best_individual[1])
                   if self.maximize else (best_population[0][1] < best_individual[1])):
                 best_individual = best_population[0]
-                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
 
             normalized_population = self.mutation(normalized_population, mean_individual,
                                                   var_individual, best_individual[0])
+            if self.cec_optimum is not None:
+                diff = best_individual[1] - self.cec_optimum
+                if diff < self.cec_error_value:
+                    logging.warning(f'{i + 1}')
+                    return best_individual
+                if i + 1 >= self.k_FES[self.k]:
+                    logging.warning(f'{diff}')
+                    self.k = self.k + 1
         return best_individual
 
     def normalize_population(self, population: list[np.ndarray]):
@@ -160,9 +177,14 @@ class MVMO(EvolutionaryAlgorithm):
 
         # best_population = normalized individuals with fitness values calculated for denormalized individuals
         denormalized_population = self.denormalize_population(population)
-        best_population = sorted([(n_ind, fitness_function(dn_ind)) for n_ind, dn_ind in
-                                  zip(population, denormalized_population)], key=lambda ind: ind[1],
+
+        # CEC version
+        best_population = sorted(list(zip(population, fitness_function(denormalized_population))), key=lambda ind: ind[1],
                                  reverse=self.maximize).copy()[:n_best_size]
+        # best_population = sorted([(n_ind, fitness_function(dn_ind)) for n_ind, dn_ind in
+        #                           zip(population, denormalized_population)], key=lambda ind: ind[1],
+        #                          reverse=self.maximize).copy()[:n_best_size]
+
 
         mean_individual = np.mean([ind[0] for ind in best_population], axis=0)
         var_individual = np.mean([ind[0] for ind in best_population], axis=0)
@@ -174,6 +196,3 @@ if __name__ == '__main__':
     optimizer = MVMO(10000, 6, boundaries, True, 3)
     population = optimizer.init_population(1000)
     optimizer.optimize(population, rastrigins_function)
-    # print(MVMO.__init__.__doc__)
-
-# TODO: check if boundaries are treated as sharp limits

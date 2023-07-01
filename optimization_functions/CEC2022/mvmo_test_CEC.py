@@ -1,9 +1,8 @@
 import numpy as np
 from CEC2022 import cec2022_func
 import random
-from evolutionary_algorithms.hs import HS
+from evolutionary_algorithms.mvmo import MVMO
 import time
-
 
 
 cec_optimum_dict = {
@@ -44,10 +43,10 @@ with open('./input_data/Rand_Seeds.txt', 'r') as handle:
 np.random.seed(seeds[int(seed_ind - 1)])
 random.seed(seeds[int(seed_ind - 1)])
 
-hs_optimizer = HS(maxFES, dimensions, boundaries, False, hmcr=0.75, par=0.50, cec_optimum=cec_optimum_dict[fx_n], cec_error_value=10 ** -8)
-hs_population = hs_optimizer.init_population(pop_size)
+mvmo_optimizer = MVMO(maxFES, dimensions, boundaries, False, mutation_size=1, cec_optimum=cec_optimum_dict[fx_n], cec_error_value=10 ** -8)
+mvmo_population = mvmo_optimizer.init_population(pop_size)
 start = time.time()
-hs_optimizer.optimize(hs_population, CEC.values)
+mvmo_optimizer.optimize(mvmo_population, CEC.values)
 end = time.time()
 
 

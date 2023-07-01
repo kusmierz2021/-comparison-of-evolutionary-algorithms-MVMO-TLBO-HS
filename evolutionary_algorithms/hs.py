@@ -9,7 +9,6 @@ import logging
 class HS(EvolutionaryAlgorithm):
     def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool,
                  hmcr: float = None, par: float = None, cec_optimum = None, cec_error_value = None):
-        # TODO: implement par parameter feature which seems to be optional
         """
         Harmony Search Algorithm
         :param iterations: number of iterations during optimization
@@ -35,7 +34,6 @@ class HS(EvolutionaryAlgorithm):
         self.cec_error_value = cec_error_value
         if cec_optimum is not None:
             self.k_FES = {k: dimensions ** (k/5-3) * iterations for k in range(16)}
-            print(self.k_FES)
             self.k = 0
 
     def evaluation(self, population: list[np.ndarray], fitness_function: callable, child: np.ndarray):
