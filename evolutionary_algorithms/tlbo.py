@@ -3,10 +3,12 @@ import numpy as np
 from random import random, choice, seed, randint
 from tqdm import tqdm
 from optimization_functions.optimization_functions import rastrigins_function
+import logging
 
 
 class TLBO(EvolutionaryAlgorithm):
-    def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool):
+    def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool,
+                 cec_optimum=None, cec_error_value=None):
         """
         Teaching Learning Based Optimization Algorithm
         :param iterations: number of iterations during optimization
@@ -18,7 +20,8 @@ class TLBO(EvolutionaryAlgorithm):
         :param maximize: True for maximization, False for minimization
         :type maximize: bool
         """
-        super().__init__(iterations, dimensions, boundaries, maximize)
+        super().__init__(iterations, dimensions, boundaries, maximize, cec_optimum, cec_error_value)
+
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
         """

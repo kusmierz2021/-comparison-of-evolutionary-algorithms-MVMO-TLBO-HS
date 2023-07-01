@@ -33,18 +33,14 @@ class MVMO(EvolutionaryAlgorithm):
         """
         logging.basicConfig(filename='mvmo.log', filemode='a', format='%(message)s')
 
-        super().__init__(iterations, dimensions, boundaries, maximize)
+        super().__init__(iterations, dimensions, boundaries, maximize, cec_optimum, cec_error_value)
         self.mutation_size = mutation_size
         self.shaping_scaling_factor_fs = shaping_scaling_factor_fs
         self.asymmetry_factor_af = asymmetry_factor_af
         self.val_shape_factor_sd = val_shape_factor_sd
         self.kd = 0.0505 / self.dimensions + 1.0
         self.n_best_size = 10
-        self.cec_optimum = cec_optimum
-        self.cec_error_value = cec_error_value
-        if cec_optimum is not None:
-            self.k_FES = {k: dimensions ** (k / 5 - 3) * iterations for k in range(16)}
-            self.k = 0
+
         # self.start = time.time()
         # self.time_dict = {10: 0.3239209717512,
         #                   100: 0.8963087019920,

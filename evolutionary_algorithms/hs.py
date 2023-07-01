@@ -26,15 +26,11 @@ class HS(EvolutionaryAlgorithm):
         """
         logging.basicConfig(filename='hs.log', filemode='a', format='%(message)s')
 
-        super().__init__(iterations, dimensions, boundaries, maximize)
+        super().__init__(iterations, dimensions, boundaries, maximize, cec_optimum, cec_error_value)
         self.hmcr = hmcr
         self.par = par
         self.max_par = 0.25
-        self.cec_optimum = cec_optimum
-        self.cec_error_value = cec_error_value
-        if cec_optimum is not None:
-            self.k_FES = {k: dimensions ** (k/5-3) * iterations for k in range(16)}
-            self.k = 0
+
 
     def evaluation(self, population: list[np.ndarray], fitness_function: callable, child: np.ndarray):
         population = population + [child]
