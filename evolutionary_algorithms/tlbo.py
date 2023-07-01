@@ -6,7 +6,7 @@ from optimization_functions.optimization_functions import rastrigins_function
 
 
 class TLBO(EvolutionaryAlgorithm):
-    def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool, set_seed=None):
+    def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool):
         """
         Teaching Learning Based Optimization Algorithm
         :param iterations: number of iterations during optimization
@@ -18,8 +18,6 @@ class TLBO(EvolutionaryAlgorithm):
         :param maximize: True for maximization, False for minimization
         :type maximize: bool
         """
-        if set_seed is not None:
-            seed(seed)
         super().__init__(iterations, dimensions, boundaries, maximize)
 
     def optimize(self, population: list[np.ndarray], optimize_function: callable):
