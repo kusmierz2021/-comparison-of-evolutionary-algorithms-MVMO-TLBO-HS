@@ -3,12 +3,12 @@ import numpy as np
 from optimization_functions.optimization_functions import rastrigins_function
 from tqdm import tqdm
 import random
-# import logging
+import logging
 
 
 class HS(EvolutionaryAlgorithm):
     def __init__(self, iterations: int, dimensions: int, boundaries: tuple[float, float], maximize: bool,
-                 hmcr: float = None, par: float = None):
+                 hmcr: float = None, par: float = None, cec_optimum = None, cec_error_value = None):
         # TODO: implement par parameter feature which seems to be optional
         """
         Harmony Search Algorithm
@@ -25,17 +25,27 @@ class HS(EvolutionaryAlgorithm):
         :param par: ranges from 0.0 to 1.0, it is optional parameter
         :type par: float
         """
-        # logging.basicConfig(filename='hs.log', filemode='w', format='%(message)s')
+        logging.basicConfig(filename='hs.log', filemode='a', format='%(message)s')
 
         super().__init__(iterations, dimensions, boundaries, maximize)
         self.hmcr = hmcr
         self.par = par
         self.max_par = 0.25
+        self.cec_optimum = cec_optimum
+        self.cec_error_value = cec_error_value
+        if cec_optimum is not None:
+            self.k_FES = {k: dimensions ** (k/5-3) * iterations for k in range(16)}
+            print(self.k_FES)
+            self.k = 0
 
     def evaluation(self, population: list[np.ndarray], fitness_function: callable, child: np.ndarray):
         population = population + [child]
-        best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+
+        # CEC version
+        best_population = sorted(list(zip(population, fitness_function(population))), key=lambda ind: ind[1],
                                  reverse=self.maximize).copy()[:len(population) - 1]
+        # best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+        #                          reverse=self.maximize).copy()[:len(population) - 1]
         return best_population
 
     def reproduction(self, population: list[np.ndarray]) -> np.ndarray:
@@ -59,8 +69,10 @@ class HS(EvolutionaryAlgorithm):
         #                 f"population_size: {len(population)}  hmcr: {self.hmcr}  par: {self.par}  "
         #                 f"optimize_function: {optimize_function.__name__} ")
         best_individual = None
-        for _ in range(self.iterations):
-        # for _ in tqdm(range(self.iterations)):
+
+        # for _ in range(self.iterations):
+        for i in tqdm(range(self.iterations)):
+
 
             child = self.reproduction(population)
             evaluated_population = self.evaluation(population, optimize_function, child)
@@ -68,14 +80,22 @@ class HS(EvolutionaryAlgorithm):
             if best_individual is None:
                 best_individual = evaluated_population[0]
 
-                # print(f"new best: {best_individual[0]} -> {best_individual[1]}")
+                print(f"new best: {best_individual[0]} -> {best_individual[1]}")
                 # logging.warning(f"new best: {best_individual[0]} -> {best_individual[1]}")
             elif ((evaluated_population[0][1] > best_individual[1]) if self.maximize
                   else (evaluated_population[0][1] < best_individual[1])):
                 best_individual = evaluated_population[0]
-                # print(f"new best: {best_individual[0]} -> {best_individual[1]}")
+                print(f"new best: {best_individual[0]} -> {best_individual[1]}")
                 # logging.warning(f"new best: {best_individual[0]} -> {best_individual[1]}")
             population = [ind[0] for ind in evaluated_population]
+            if self.cec_optimum is not None:
+                diff = best_individual[1] - self.cec_optimum
+                if diff < self.cec_error_value:
+                    logging.warning(f'{i+1}')
+                    return best_individual
+                if i+1 >= self.k_FES[self.k]:
+                    logging.warning(f'{diff}')
+                    self.k = self.k + 1
         return best_individual
 
 
