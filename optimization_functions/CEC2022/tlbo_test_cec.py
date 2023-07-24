@@ -28,7 +28,7 @@ boundaries = (-100, 100)
 dimensions = 10
 CEC = cec2022_func(func_num=fx_n)
 runs = 30
-pop_size = 10
+pop_size = 1000
 
 seed_ind = (dimensions / 10 * fx_n * runs + 1) - runs
 seed_ind = seed_ind % 1000 + 1
@@ -36,7 +36,7 @@ seed_ind = seed_ind % 1000 + 1
 with open('./input_data/Rand_Seeds.txt', 'r') as handle:
         seeds = handle.read()
         seeds = list(seeds.replace('\t', '').replace('\r', '').replace(' ', '').split('\n'))[:-1]
-        print(seeds)
+
         seeds = [int(float(seed[:4]) * 10 ** int(seed[-1:])) for seed in seeds]
 
 

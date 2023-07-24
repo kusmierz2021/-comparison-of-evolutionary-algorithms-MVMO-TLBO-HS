@@ -14,9 +14,9 @@ if __name__ == '__main__':
     rosenbrock_boundaries = (-10, 10)
     levy_boundaries = (-10, 10)
 
-    # tlbo_optimizer = TLBO(100_000, 6, rastrigins_boundaries, True)
-    # tlbo_population = tlbo_optimizer.init_population(100)
-    # tlbo_optimizer.optimize(tlbo_population, rastrigins_function)
+    tlbo_optimizer = TLBO(100_000, 6, rastrigins_boundaries, True)
+    tlbo_population = tlbo_optimizer.init_population(10)
+    tlbo_optimizer.optimize(tlbo_population, rastrigins_function)
 
     # hs in this case is so much better with 100 as init population size
     # hs_optimizer = HS(10_000, 6, rastrigins_boundaries, True, hmcr=0.9)

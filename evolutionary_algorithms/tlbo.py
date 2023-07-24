@@ -43,9 +43,9 @@ class TLBO(EvolutionaryAlgorithm):
         if self.cec_optimum is not None:
             self.iterations = int(self.iterations / 2)
 
-        for i in tqdm(range(self.iterations)):
+        # for i in tqdm(range(self.iterations)):
 
-        # for _ in range(self.iterations):
+        for i in range(self.iterations):
 
 
             mutated_population = self.mutation([ind[0] for ind in evaluated_population], best_individual[0], mean_individual)
@@ -149,8 +149,8 @@ class TLBO(EvolutionaryAlgorithm):
         """
 
         # CEC version
-        evaluated_population = list(zip(population, fitness_function(population)))
-        # evaluated_population = [(ind, fitness_function(ind)) for ind in population]
+        # evaluated_population = list(zip(population, fitness_function(population)))
+        evaluated_population = [(ind, fitness_function(ind)) for ind in population]
         best_individual = sorted(evaluated_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
         mean_individual = np.mean(population, axis=0)
 
