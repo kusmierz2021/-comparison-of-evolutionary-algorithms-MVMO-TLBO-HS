@@ -130,7 +130,7 @@ class TLBO(EvolutionaryAlgorithm):
         # mutation_rate = round((random()+1))
         # r = random()
         mutagen_pop = [np.array([random() for _ in range(len(mean_individual))]) *
-                       (best_individual - np.array([random.randint(1, 2)] * self.dimensions) *
+                       (best_individual - np.array([randint(1, 2)] * self.dimensions) *
                         mean_individual) for _ in range(len(population))]
         mutated_population = [ind + mutagen for (ind, mutagen) in zip(population, mutagen_pop)]
         mutated_population = self.ensure_boundaries_population(mutated_population)
