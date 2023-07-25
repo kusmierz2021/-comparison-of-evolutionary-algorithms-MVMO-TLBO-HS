@@ -106,7 +106,7 @@ def tlbo(fitness, max_iter, population, boundaries):
 
             # teaching factor (TF)
             # either 1 or 2 ( randomly chosen)
-            TF = random.randint(1, 3)
+            TF = random.randint(1, 2)
 
             # best student of the class is teacher
             Xteacher = Xbest
