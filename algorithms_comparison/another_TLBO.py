@@ -28,10 +28,13 @@ def fitness_rosenbrock(position):
 
 # zakharov function
 def fitness_zakharov(position):
-    fitness_value = 0.0
+    part1 = 0.0
+    part2 = 0.0
     for i in range(len(position)):
         x1 = position[i]
-        fitness_value += x1**2 + (0.5 * x1)**2 + (0.5 * x1)**4
+        part1 += x1**2
+        part2 += 0.5 * x1
+    fitness_value = part1 + part2 ** 2 + part2 ** 4
     return fitness_value
 
 # sphere function
