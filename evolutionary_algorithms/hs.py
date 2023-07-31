@@ -36,10 +36,10 @@ class HS(EvolutionaryAlgorithm):
         population = population + [child]
 
         # CEC version
-        # best_population = sorted(list(zip(population, fitness_function(population))), key=lambda ind: ind[1],
-        #                          reverse=self.maximize).copy()[:len(population) - 1]
-        best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+        best_population = sorted(list(zip(population, fitness_function(population))), key=lambda ind: ind[1],
                                  reverse=self.maximize).copy()[:len(population) - 1]
+        # best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+        #                          reverse=self.maximize).copy()[:len(population) - 1]
         return best_population
 
     def reproduction(self, population: list[np.ndarray]) -> np.ndarray:

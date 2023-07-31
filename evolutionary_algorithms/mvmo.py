@@ -59,8 +59,8 @@ class MVMO(EvolutionaryAlgorithm):
         normalized_population = self.normalize_population(population)
         best_population = best_individual = None
 
-        for i in tqdm(range(self.iterations)):
-        # for i in range(self.iterations):
+        # for i in tqdm(range(self.iterations)):
+        for i in range(self.iterations):
             # if (time.time() - self.start) > self.time_dict[len(population)]:
             #     return best_individual
             best_population, mean_individual, var_individual = self.evaluation(normalized_population,
@@ -69,11 +69,11 @@ class MVMO(EvolutionaryAlgorithm):
 
             if best_individual is None:
                 best_individual = best_population[0]
-                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
             elif ((best_population[0][1] > best_individual[1])
                   if self.maximize else (best_population[0][1] < best_individual[1])):
                 best_individual = best_population[0]
-                print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
+                # print(f"new best: {self.denormalize_population([best_individual[0]])} -> {best_individual[1]}")
 
             normalized_population = self.mutation(normalized_population, mean_individual,
                                                   var_individual, best_individual[0])

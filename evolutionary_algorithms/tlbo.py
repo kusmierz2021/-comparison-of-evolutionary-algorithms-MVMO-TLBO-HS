@@ -148,8 +148,8 @@ class TLBO(EvolutionaryAlgorithm):
         """
 
         # CEC version
-        # evaluated_population = list(zip(population, fitness_function(population)))
-        evaluated_population = [(ind, fitness_function(ind)) for ind in population]
+        evaluated_population = list(zip(population, fitness_function(population)))
+        # evaluated_population = [(ind, fitness_function(ind)) for ind in population]
         best_individual = sorted(evaluated_population, key=lambda ind: ind[1], reverse=self.maximize)[0]
         mean_individual = np.mean(population, axis=0)
 
