@@ -28,8 +28,8 @@ dimensions = 10
 CEC = cec2022_func(func_num=fx_n)
 runs = 30
 pop_size = 10
-
-seed_ind = (dimensions / 10 * fx_n * runs + 1) - runs
+run = 1
+seed_ind = (dimensions / 10 * fx_n * runs + run) - runs
 seed_ind = seed_ind % 1000 + 1
 
 with open('./input_data/Rand_Seeds.txt', 'r') as handle:
@@ -40,8 +40,8 @@ with open('./input_data/Rand_Seeds.txt', 'r') as handle:
 
 
 
-np.random.seed(seeds[int(seed_ind - 1)])
-random.seed(seeds[int(seed_ind - 1)])
+np.random.seed(seeds[int(seed_ind)])
+random.seed(seeds[int(seed_ind)])
 
 mvmo_optimizer = MVMO(maxFES, dimensions, boundaries, False, mutation_size=1, cec_optimum=cec_optimum_dict[fx_n], cec_error_value=10 ** -8)
 mvmo_population = mvmo_optimizer.init_population(pop_size)
