@@ -36,10 +36,10 @@ class HS(EvolutionaryAlgorithm):
         population = population + [child]
 
         # CEC version
-        best_population = sorted(list(zip(population, fitness_function(population))), key=lambda ind: ind[1],
-                                 reverse=self.maximize).copy()[:len(population) - 1]
-        # best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+        # best_population = sorted(list(zip(population, fitness_function(population))), key=lambda ind: ind[1],
         #                          reverse=self.maximize).copy()[:len(population) - 1]
+        best_population = sorted([(ind, fitness_function(ind)) for ind in population], key=lambda ind: ind[1],
+                                 reverse=self.maximize).copy()[:len(population) - 1]
         return best_population
 
     def reproduction(self, population: list[np.ndarray]) -> np.ndarray:
@@ -64,8 +64,8 @@ class HS(EvolutionaryAlgorithm):
         #                 f"optimize_function: {optimize_function.__name__} ")
         best_individual = None
 
-        # for _ in range(self.iterations):
-        for i in tqdm(range(self.iterations)):
+        for i in range(self.iterations):
+        # for i in tqdm(range(self.iterations)):
 
 
             child = self.reproduction(population)
@@ -74,12 +74,12 @@ class HS(EvolutionaryAlgorithm):
             if best_individual is None:
                 best_individual = evaluated_population[0]
 
-                print(f"new best: {best_individual[0]} -> {best_individual[1]}")
+                # print(f"new best: {best_individual[0]} -> {best_individual[1]}")
                 # logging.warning(f"new best: {best_individual[0]} -> {best_individual[1]}")
             elif ((evaluated_population[0][1] > best_individual[1]) if self.maximize
                   else (evaluated_population[0][1] < best_individual[1])):
                 best_individual = evaluated_population[0]
-                print(f"new best: {best_individual[0]} -> {best_individual[1]}")
+                # print(f"new best: {best_individual[0]} -> {best_individual[1]}")
                 # logging.warning(f"new best: {best_individual[0]} -> {best_individual[1]}")
             population = [ind[0] for ind in evaluated_population]
             if self.cec_optimum is not None:
